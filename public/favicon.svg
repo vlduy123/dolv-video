@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Dolv.ai">
+  <title>Dolv.ai</title>
+  <rect width="256" height="256" rx="56" fill="#10b981"/>
+  <g fill="#ffffff">
+    <rect x="150" y="46" width="34" height="168" rx="17"/>
+    <path fill-rule="evenodd" d="M42 150a62 62 0 1 0 124 0a62 62 0 1 0-124 0M88 122 130 150 88 178Z"/>
+  </g>
+</svg>
