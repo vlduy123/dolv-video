@@ -1,0 +1,53 @@
+name: Render promo
+
+# Free mp4 rendering on GitHub's runners. Trigger manually (Actions tab → Run
+# workflow) or on a push that touches the video. The finished mp4 is uploaded as a
+# downloadable artifact. Optional `spec` input lets you render any brand's spec
+# (written to public/spec.json, which the composition reads when present).
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: "Optional spec JSON (paste to render a custom brand). Empty = built-in dolv promo."
+        required: false
+        default: ""
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "package.json"
+      - "package-lock.json"
+      - "remotion.config.ts"
+      - ".github/workflows/render.yml"
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Write custom spec (if provided)
+        if: ${{ github.event.inputs.spec != '' }}
+        run: printf '%s' '${{ github.event.inputs.spec }}' > public/spec.json
+
+      - name: Ensure headless browser
+        run: npx remotion browser ensure
+
+      - name: Render
+        run: npx remotion render DolvPromo out/dolv-promo.mp4 --log=verbose
+
+      - name: Upload mp4
+        uses: actions/upload-artifact@v4
+        with:
+          name: dolv-promo-mp4
+          path: out/dolv-promo.mp4
+          if-no-files-found: error
