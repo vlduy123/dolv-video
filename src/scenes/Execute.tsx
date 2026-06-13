@@ -1,5 +1,5 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
-import { C, FUNNEL, FLOW } from "../theme";
+import { useSpec } from "../spec";
 import { FONT_FAMILY } from "../fonts";
 
 // Beat 5 (15–19s): EXECUTE. The human-in-the-loop flow (Prepare → Approve →
@@ -8,6 +8,8 @@ import { FONT_FAMILY } from "../fonts";
 export const Execute = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors: C, execute, funnel: FUNNEL } = useSpec();
+  const FLOW = execute.flow;
 
   const card = spring({ frame: frame - 30, fps, config: { damping: 200, mass: 0.8 } });
   const footIn = interpolate(frame, [108, 128], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -17,7 +19,7 @@ export const Execute = () => {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 30 }}>
         {/* phase label */}
         <span style={{ fontSize: 28, fontWeight: 600, color: C.primary, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-          02 · Execute real work
+          {execute.kicker}
         </span>
 
         {/* Prepare → Approve → Execute stepper */}
@@ -68,7 +70,7 @@ export const Execute = () => {
                 <i key={c} style={{ width: 13, height: 13, borderRadius: "50%", background: c, display: "inline-block" }} />
               ))}
             </span>
-            <span style={{ fontSize: 22, fontWeight: 600, color: C.text, marginLeft: 6 }}>dolv · command center</span>
+            <span style={{ fontSize: 22, fontWeight: 600, color: C.text, marginLeft: 6 }}>{execute.cardTitle}</span>
             <span style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8, fontSize: 18, fontWeight: 600, color: C.primary }}>
               <i style={{ width: 10, height: 10, borderRadius: "50%", background: C.primary, boxShadow: `0 0 0 4px ${C.primarySoft}` }} />
               live
@@ -107,9 +109,9 @@ export const Execute = () => {
                 <path d="m20 6-11 11-5-5" />
               </svg>
             </span>
-            <span style={{ fontSize: 24, fontWeight: 500, color: C.text }}>Outreach sent — measuring</span>
+            <span style={{ fontSize: 24, fontWeight: 500, color: C.text }}>{execute.footer}</span>
             <span style={{ marginLeft: "auto", padding: "9px 18px", borderRadius: 999, fontSize: 20, fontWeight: 600, color: C.primary, background: C.primarySoft, border: `1px solid ${C.cardBorder}` }}>
-              Execute → Measure
+              {execute.chip}
             </span>
           </div>
         </div>

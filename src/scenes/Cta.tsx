@@ -1,5 +1,5 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
-import { C } from "../theme";
+import { useSpec } from "../spec";
 import { FONT_FAMILY } from "../fonts";
 import { Wordmark } from "../components/Wordmark";
 import { Glow } from "../components/Glow";
@@ -8,6 +8,7 @@ import { Glow } from "../components/Glow";
 export const Cta = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors: C, cta } = useSpec();
 
   const pop = spring({ frame, fps, config: { damping: 14, mass: 0.9, stiffness: 120 } });
   const sub = interpolate(frame, [16, 34], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -26,7 +27,7 @@ export const Cta = () => {
             fontWeight: 800,
             letterSpacing: "-0.04em",
             lineHeight: 1,
-            backgroundImage: `linear-gradient(100deg, ${C.primary} 0%, #34e0ab 55%, ${C.primary} 100%)`,
+            backgroundImage: `linear-gradient(100deg, ${C.primary} 0%, ${C.mint} 55%, ${C.primary} 100%)`,
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             color: "transparent",
@@ -34,7 +35,7 @@ export const Cta = () => {
             opacity: pop,
           }}
         >
-          dolv it.
+          {cta.big}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 24, opacity: sub, transform: `translateY(${interpolate(sub, [0, 1], [12, 0])}px)` }}>
           <span
@@ -48,9 +49,9 @@ export const Cta = () => {
               transform: `scale(${interpolate(btn, [0, 1], [0.9, 1])})`,
             }}
           >
-            Open dolv →
+            {cta.button}
           </span>
-          <span style={{ fontSize: 32, fontWeight: 500, color: C.muted }}>app.dolv.work</span>
+          <span style={{ fontSize: 32, fontWeight: 500, color: C.muted }}>{cta.url}</span>
         </div>
       </div>
     </AbsoluteFill>

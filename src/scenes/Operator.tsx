@@ -1,5 +1,5 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
-import { C } from "../theme";
+import { useSpec } from "../spec";
 import { FONT_FAMILY } from "../fonts";
 
 // Beat 3 (NEW): the differentiator. Proof.astro "Operator, not a chatbot" +
@@ -7,6 +7,7 @@ import { FONT_FAMILY } from "../fonts";
 export const Operator = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors: C, operator } = useSpec();
 
   const pop = spring({ frame, fps, config: { damping: 14, mass: 0.8, stiffness: 120 } });
   const strike = interpolate(frame, [26, 46], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -26,11 +27,11 @@ export const Operator = () => {
             lineHeight: 1.05,
           }}
         >
-          An <span style={{ color: C.primary }}>operator</span>,
+          An <span style={{ color: C.primary }}>{operator.accent}</span>,
           <br />
           not a{" "}
           <span style={{ position: "relative", display: "inline-block", color: C.muted }}>
-            chatbot
+            {operator.strike}
             <span
               style={{
                 position: "absolute",
@@ -57,7 +58,7 @@ export const Operator = () => {
             transform: `translateY(${interpolate(sub, [0, 1], [12, 0])}px)`,
           }}
         >
-          It acts on your stack — not just reports on it.
+          {operator.sub}
         </div>
       </div>
     </AbsoluteFill>

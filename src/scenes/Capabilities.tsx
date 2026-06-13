@@ -1,5 +1,5 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
-import { C, CAPABILITIES } from "../theme";
+import { useSpec } from "../spec";
 import { FONT_FAMILY } from "../fonts";
 import { Logo } from "../components/Logo";
 
@@ -9,6 +9,8 @@ import { Logo } from "../components/Logo";
 export const Capabilities = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors: C, capabilities } = useSpec();
+  const CAPABILITIES = capabilities.items;
 
   const heading = interpolate(frame, [0, 16], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
@@ -17,10 +19,10 @@ export const Capabilities = () => {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 36, width: 1080 }}>
         <div style={{ textAlign: "center", opacity: heading, transform: `translateY(${interpolate(heading, [0, 1], [12, 0])}px)` }}>
           <span style={{ fontSize: 28, fontWeight: 600, color: C.primary, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-            Capabilities
+            {capabilities.kicker}
           </span>
           <div style={{ fontSize: 56, fontWeight: 700, color: C.text, letterSpacing: "-0.02em", marginTop: 4 }}>
-            It does the work
+            {capabilities.title}
           </div>
         </div>
 
@@ -53,7 +55,7 @@ export const Capabilities = () => {
                     flexShrink: 0,
                   }}
                 >
-                  <Logo src={cap.icon} color={C.primary} size={30} />
+                  {cap.icon ? <Logo src={cap.icon} color={C.primary} size={30} /> : <span style={{ width: 18, height: 18, borderRadius: 5, background: C.primary }} />}
                 </span>
                 <span style={{ fontSize: 34, fontWeight: 600, color: C.text }}>{cap.label}</span>
               </div>

@@ -1,14 +1,14 @@
 import { AbsoluteFill } from "remotion";
-import { C } from "../theme";
+import { useSpec } from "../spec";
 
 // Soft radial brand wash — the "glow" the site uses behind the hero. Position +
-// size + opacity are caller-driven so each scene can place its own light source.
+// size + opacity are caller-driven; color defaults to the spec's primary.
 export const Glow = ({
   x = "50%",
   y = "50%",
   size = 1100,
   opacity = 0.5,
-  color = C.primary,
+  color,
 }: {
   x?: string;
   y?: string;
@@ -16,6 +16,8 @@ export const Glow = ({
   opacity?: number;
   color?: string;
 }) => {
+  const { colors: C } = useSpec();
+  const c = color || C.primary;
   return (
     <AbsoluteFill style={{ pointerEvents: "none" }}>
       <div
@@ -26,7 +28,7 @@ export const Glow = ({
           width: size,
           height: size,
           transform: "translate(-50%, -50%)",
-          background: `radial-gradient(circle, ${color} 0%, transparent 68%)`,
+          background: `radial-gradient(circle, ${c} 0%, transparent 68%)`,
           opacity,
           filter: "blur(8px)",
         }}

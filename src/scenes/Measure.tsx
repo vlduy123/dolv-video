@@ -1,11 +1,12 @@
 import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
-import { C, FUNNEL } from "../theme";
+import { useSpec } from "../spec";
 import { FONT_FAMILY } from "../fonts";
 
 // Beat 7: MEASURE. The funnel figures count up under their real TOFU/MOFU/BOFU
 // names (LoopStory) and resolve to "qualified pipeline".
 export const Measure = () => {
   const frame = useCurrentFrame();
+  const { colors: C, measure, funnel: FUNNEL } = useSpec();
 
   const heading = interpolate(frame, [0, 16], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const tail = interpolate(frame, [64, 84], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -14,7 +15,7 @@ export const Measure = () => {
     <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", fontFamily: FONT_FAMILY }}>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 44 }}>
         <span style={{ fontSize: 28, fontWeight: 600, color: C.primary, letterSpacing: "0.12em", textTransform: "uppercase", opacity: heading }}>
-          03 · Measure every outcome
+          {measure.kicker}
         </span>
         <div style={{ display: "flex", gap: 80, alignItems: "flex-end" }}>
           {FUNNEL.map((m, i) => {
@@ -52,7 +53,7 @@ export const Measure = () => {
         </svg>
 
         <span style={{ fontSize: 30, fontWeight: 600, color: C.text, opacity: tail, transform: `translateY(${interpolate(tail, [0, 1], [10, 0])}px)` }}>
-          → measured into <span style={{ color: C.primary }}>qualified pipeline</span>
+          → measured into <span style={{ color: C.primary }}>{measure.tail}</span>
         </span>
       </div>
     </AbsoluteFill>

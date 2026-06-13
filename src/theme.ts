@@ -8,6 +8,8 @@ export const C = {
   primary: "#10b981", // SITE.themeLight — emerald
   primaryDim: "#0c8f63",
   primarySoft: "rgba(16,185,129,0.14)",
+  mint: "#34e0ab", // gradient-mid for "dolv it." headline shimmer
+
   accent: "#f97316", // DESIGN.md tertiary — one hero accent
   text: "#eaf4f0",
   muted: "#86a499",

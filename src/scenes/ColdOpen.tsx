@@ -1,5 +1,5 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
-import { C } from "../theme";
+import { useSpec } from "../spec";
 import { FONT_FAMILY } from "../fonts";
 import { Wordmark } from "../components/Wordmark";
 import { Glow } from "../components/Glow";
@@ -9,6 +9,7 @@ import { Glow } from "../components/Glow";
 export const ColdOpen = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors: C, open } = useSpec();
 
   const enter = spring({ frame, fps, config: { damping: 200, mass: 0.8 } });
   const scale = interpolate(enter, [0, 1], [0.82, 1]);
@@ -53,7 +54,7 @@ export const ColdOpen = () => {
               transform: `translateY(${interpolate(eyebrow, [0, 1], [10, 0])}px)`,
             }}
           >
-            the AI-native command center
+            {open.sub}
           </span>
         </div>
       </AbsoluteFill>

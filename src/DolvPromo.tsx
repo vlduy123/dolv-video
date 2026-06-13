@@ -1,5 +1,6 @@
 import { AbsoluteFill, Audio, Easing, staticFile } from "remotion";
 import { TransitionSeries, linearTiming, springTiming } from "@remotion/transitions";
+import { DEFAULT_SPEC, SpecContext, mergeSpec, type Spec } from "./spec";
 import { slide } from "@remotion/transitions/slide";
 import { wipe } from "@remotion/transitions/wipe";
 import { clockWipe } from "@remotion/transitions/clock-wipe";
@@ -22,11 +23,14 @@ import { Cta } from "./scenes/Cta";
 const ease = linearTiming({ durationInFrames: 20, easing: Easing.inOut(Easing.cubic) });
 const bounce = springTiming({ config: { damping: 26, mass: 0.9 }, durationInFrames: 22 });
 
-export const DolvPromo = () => {
+export const DolvPromo = ({ spec: incoming }: { spec?: Partial<Spec> }) => {
+  const spec = mergeSpec(DEFAULT_SPEC, incoming);
+  const audioSrc = spec.voUrl || (spec.bundledVo ? staticFile(spec.bundledVo) : null);
   return (
-    <AbsoluteFill style={{ backgroundColor: "#0b0f0e" }}>
-      <Audio src={staticFile("vo.mp3")} />
-      <Background />
+    <SpecContext.Provider value={spec}>
+      <AbsoluteFill style={{ backgroundColor: spec.colors.bg }}>
+        {audioSrc ? <Audio src={audioSrc} /> : null}
+        <Background />
 
       <TransitionSeries>
         <TransitionSeries.Sequence durationInFrames={90}>
@@ -71,6 +75,7 @@ export const DolvPromo = () => {
 
       {/* grain over the whole comp too, so transitions stay textured */}
       <Noise opacity={0.035} />
-    </AbsoluteFill>
+      </AbsoluteFill>
+    </SpecContext.Provider>
   );
 };

@@ -1,5 +1,5 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
-import { C } from "../theme";
+import { useSpec } from "../spec";
 import { FONT_FAMILY } from "../fonts";
 
 // Beat 2 (4–9s): the hook — the site's exact H1 line.
@@ -7,6 +7,7 @@ import { FONT_FAMILY } from "../fonts";
 export const Hook = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors: C, hook } = useSpec();
 
   const line1 = interpolate(frame, [0, 24], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const line1Y = interpolate(line1, [0, 1], [22, 0]);
@@ -29,7 +30,7 @@ export const Hook = () => {
             letterSpacing: "-0.02em",
           }}
         >
-          don&rsquo;t just plan it.
+          {hook.pre}
         </div>
         <div style={{ position: "relative", display: "inline-block", marginTop: 14, transform: `scale(${popScale})`, opacity: pop }}>
           <span
@@ -37,14 +38,14 @@ export const Hook = () => {
               fontSize: 168,
               fontWeight: 800,
               letterSpacing: "-0.04em",
-              backgroundImage: `linear-gradient(100deg, ${C.primary} 0%, #34e0ab 55%, ${C.primary} 100%)`,
+              backgroundImage: `linear-gradient(100deg, ${C.primary} 0%, ${C.mint} 55%, ${C.primary} 100%)`,
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               lineHeight: 1,
             }}
           >
-            dolv it.
+            {hook.big}
           </span>
           <div
             style={{

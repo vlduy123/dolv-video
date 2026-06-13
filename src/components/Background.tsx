@@ -1,5 +1,5 @@
 import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
-import { C, INTEGRATIONS } from "../theme";
+import { useSpec } from "../spec";
 import { Logo } from "./Logo";
 import { Noise } from "./Noise";
 
@@ -26,6 +26,8 @@ const Blob = ({ x, y, size, color, op }: { x: string; y: string; size: number; c
 
 export const Background = () => {
   const frame = useCurrentFrame();
+  const { colors: C, connect } = useSpec();
+  const INTEGRATIONS = connect.integrations;
 
   // Parallax drift — each layer moves at its own speed for depth.
   const slow = interpolate(frame, [0, 900], [0, 1]);
@@ -76,7 +78,7 @@ export const Background = () => {
                 transform: `rotate(${i * 7 - 14}deg)`,
               }}
             >
-              <Logo src={it.src} color={C.primary} size={size} />
+              {it.src ? <Logo src={it.src} color={C.primary} size={size} /> : null}
             </div>
           );
         })}

@@ -1,5 +1,5 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
-import { C, INTEGRATIONS } from "../theme";
+import { useSpec } from "../spec";
 import { FONT_FAMILY } from "../fonts";
 import { Logo } from "../components/Logo";
 import { Mark } from "../components/Wordmark";
@@ -21,6 +21,8 @@ const NODES = [
 export const Connect = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors: C, connect } = useSpec();
+  const integrations = connect.integrations;
 
   const heading = interpolate(frame, [0, 20], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const markIn = spring({ frame: frame - 8, fps, config: { damping: 200, mass: 0.7 } });
@@ -31,10 +33,10 @@ export const Connect = () => {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>
         <div style={{ textAlign: "center", opacity: heading, transform: `translateY(${interpolate(heading, [0, 1], [14, 0])}px)` }}>
           <div style={{ fontSize: 28, fontWeight: 600, color: C.primary, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-            01 · Connect
+            {connect.kicker}
           </div>
           <div style={{ fontSize: 60, fontWeight: 700, color: C.text, letterSpacing: "-0.02em", marginTop: 4 }}>
-            Connect your stack
+            {connect.title}
           </div>
         </div>
 
@@ -84,7 +86,8 @@ export const Connect = () => {
 
           {/* integration nodes */}
           {NODES.map((n, i) => {
-            const it = INTEGRATIONS[i];
+            const it = integrations[i];
+            if (!it) return null;
             const s = spring({ frame: frame - 24 - i * 7, fps, config: { damping: 15, mass: 0.6, stiffness: 120 } });
             return (
               <div
@@ -106,7 +109,7 @@ export const Connect = () => {
                   boxShadow: "0 18px 50px rgba(0,0,0,0.45)",
                 }}
               >
-                <Logo src={it.src} color={it.color} size={42} />
+                {it.src ? <Logo src={it.src} color={it.color} size={42} /> : <span style={{ width: 42, height: 42, borderRadius: 10, background: it.color }} />}
                 <span style={{ fontSize: 17, fontWeight: 500, color: C.muted, whiteSpace: "nowrap" }}>{it.label}</span>
               </div>
             );
@@ -114,7 +117,7 @@ export const Connect = () => {
         </div>
 
         <span style={{ fontSize: 24, fontWeight: 500, color: C.muted, opacity: interpolate(frame, [70, 92], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
-          Twenty read &amp; write integrations — so dolv can act, not just report.
+          {connect.caption}
         </span>
       </div>
     </AbsoluteFill>

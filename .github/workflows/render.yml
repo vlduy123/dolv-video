@@ -35,15 +35,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Write custom spec (if provided)
+      - name: Write props (if a custom spec was provided)
         if: ${{ github.event.inputs.spec != '' }}
-        run: printf '%s' '${{ github.event.inputs.spec }}' > public/spec.json
+        run: printf '{"spec":%s}' '${{ github.event.inputs.spec }}' > props.json
 
       - name: Ensure headless browser
         run: npx remotion browser ensure
 
       - name: Render
-        run: npx remotion render DolvPromo out/dolv-promo.mp4 --log=verbose
+        run: |
+          if [ -f props.json ]; then
+            npx remotion render DolvPromo out/dolv-promo.mp4 --props=./props.json --log=verbose
+          else
+            npx remotion render DolvPromo out/dolv-promo.mp4 --log=verbose
+          fi
 
       - name: Upload mp4
         uses: actions/upload-artifact@v4
